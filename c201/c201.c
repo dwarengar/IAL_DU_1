@@ -81,7 +81,7 @@ void DisposeList (tList *L) {
 	struct tElem *pomElem;	
 	pomElem = malloc(sizeof(struct tElem));
 
-	while ( L->First != NULL )
+	while ( L->First )
 	{
 		pomElem->ptr = L->First;
 		L->First = L->First->ptr;
@@ -103,9 +103,11 @@ void InsertFirst (tList *L, int val) {
 **/
 	struct tElem *newElemPtr = malloc(sizeof(tElemPtr));
 
-	if (newElemPtr == NULL)
+	if ( !newElemPtr ){
 		Error();
-	
+		return;
+	}	
+
 	newElemPtr->ptr = L->First;
 	L->First = newElemPtr;
 	newElemPtr->data = val;	
@@ -127,8 +129,10 @@ void CopyFirst (tList *L, int *val) {
 ** Prostřednictvím parametru val vrátí hodnotu prvního prvku seznamu L.
 ** Pokud je seznam L prázdný, volá funkci Error().
 **/
-	if (L->First == NULL)
+	if ( !L->First ){
 		Error();
+		return;
+	}
 	else
 		*val = L->First->data; 
 }
@@ -143,7 +147,7 @@ void DeleteFirst (tList *L) {
 	struct tElem *pomElem;	
 	pomElem = malloc(sizeof(struct tElem));
 
-	if (L->First != NULL)
+	if (L->First )
 	{
 		if (L->Act == L->First)
 			L->Act = NULL;
@@ -167,7 +171,7 @@ void PostDelete (tList *L) {
 	tList *pomL;
 	pomL = malloc(sizeof(tList));
 
-	if (L->Act != NULL && L->Act->ptr != NULL)
+	if (L->Act && L->Act->ptr)
 	{
 
 		pomL->Act = L->Act->ptr;
@@ -190,16 +194,18 @@ void PostInsert (tList *L, int val) {
 	tList *pomL;
 	pomL = malloc(sizeof(tList));
 
-	if( L->Act != NULL )
+	if( L->Act )
 	{
 		struct tElem *newElemPtr = malloc(sizeof(tElemPtr));
 
-		if (newElemPtr == NULL)
+		if ( !newElemPtr ){
 			Error();
+			return;
+		}
 	
 		pomL->Act = L->Act->ptr;
 		L->Act->ptr = newElemPtr;	
-		newElemPtr->ptr = pomL->Act->ptr;
+		newElemPtr->ptr = pomL->Act;
 		newElemPtr->data = val;
 	}
 
@@ -211,8 +217,10 @@ void Copy (tList *L, int *val) {
 ** Prostřednictvím parametru val vrátí hodnotu aktivního prvku seznamu L.
 ** Pokud seznam není aktivní, zavolá funkci Error().
 **/
-	if( L->Act == NULL )
+	if( !L->Act ){
 		Error();
+		return;
+	}
 	else
 		*val = L->Act->data;
 	
@@ -224,7 +232,7 @@ void Actualize (tList *L, int val) {
 ** Pokud seznam L není aktivní, nedělá nic!
 **/
 
-	if ( L->Act != NULL)
+	if ( L->Act )
 		L->Act->data = val;	
 }
 
@@ -236,7 +244,7 @@ void Succ (tList *L) {
 ** Pokud není předaný seznam L aktivní, nedělá funkce nic.
 **/
 	
-	if ( L->Act == NULL)
+	if ( L->Act )
 		L->Act = L->Act->ptr;
 		
 }
@@ -247,7 +255,7 @@ int Active (tList *L) {
 ** Tuto funkci je vhodné implementovat jedním příkazem return. 
 **/
 	
-	if ( L->Act != NULL )
+	if ( L->Act )
 		return 1;
 	else
 		return 0; 
